@@ -3,11 +3,7 @@
 A tool for Wordle score-hunters to avoid guessing past solutions.
 
 ## Usage
-Create a new bookmark by dragging 
-<a href="javascript:(async()=>{const DATA_URL='https://wordle-assistant.onrender.com/';const rows=Array.from(document.getElementsByClassName('Row-module_row__pwpBq'));function rowTiles(row){return Array.from(row.getElementsByClassName('Tile-module_tile__UWEHN'))}function setWarning(rowNumber){rowTiles(rows[rowNumber]).map(tile=>tile.setAttribute('style','background: firebrick'))}function clearWarning(){rows.map(row=>{rowTiles(row).map(tile=>tile.setAttribute('style',''))})}function rowWord(rowTiles){return rowTiles.map(elt=>elt.innerHTML).join('')}const words=()=>rows.map(rowTiles).map(rowWord);const pastWords=await fetch(DATA_URL).then(data=>data.json());let state={warning:false};const checkRepeat=()=>{const currentRow=words().indexOf('')-1;if(currentRow===-1){currentRow=5}const currentWord=words()[currentRow];if(currentWord.length>=5&&pastWords.includes(currentWord)){if(state.warning){return}setWarning(currentRow);state.warning=true}else{clearWarning();state.warning=false}};setInterval(checkRepeat,500)})()">This Link</a>
-to your bookmarks bar. Navigate to the Wordle site and click that bookmark. If you subsequently attempt to enter a previously-used word, it will be highlighted in red.
-
-Alternatively, you can create a new bookmark and paste in the contents of the [bookmarklet](/bookmarklet.js) file.
+Create a new bookmark and paste in the contents of the [bookmarklet](/bookmarklet.js) file. Navigate to the Wordle site and click that bookmark. If you subsequently attempt to enter a previously-used word, it will be highlighted in red.
 
 ## Build
 Install Rails dependencies with `bundle install`
