@@ -13,6 +13,5 @@ class DataLoader
 
     def update_list
         last = source_document.css('.article_body_content ul li a')[0].inner_html
-        # WordleSolution.create(word: last, solution_date: Date.yesterday)
     end
 end
