@@ -10,8 +10,4 @@ class DataLoader
         list = source_document.css('.article_body_content ul')[1]
         list.element_children.map {|x| x.inner_html.downcase}
     end
-
-    def update_list
-        last = source_document.css('.article_body_content ul li a')[0].inner_html
-    end
 end
