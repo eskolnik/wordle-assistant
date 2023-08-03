@@ -5,5 +5,4 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   root "wordle_solutions#index"
-  # resources :wordle_solutions, only: [:index]
 end
