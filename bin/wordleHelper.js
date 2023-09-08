@@ -1,51 +1,53 @@
 (async () => {
-const DATA_URL = "https://wordle-assistant.onrender.com/"
-
+const LOCAL_CACHE_KEY = "WORDLE_HELPER_LOCAL_CACHE_KEY"
 const rows = Array.from(document.getElementsByClassName("Row-module_row__pwpBq"));
 
-function rowTiles(row) {
+function getRowTiles(row) {
     return Array.from(row.getElementsByClassName("Tile-module_tile__UWEHN"));
 }
 
 function setWarning(rowNumber) {
-    rowTiles(rows[rowNumber])
-    .map(tile => tile.setAttribute("style", "background: firebrick"));
+    getRowTiles(rows[rowNumber])
+    .forEach(tile => tile.setAttribute("style", "border: 2px solid firebrick"));
 }
 
-function clearWarning() {
-    rows.map(row => {
-        rowTiles(row).map(tile => tile.setAttribute("style", ""))
+function clearWarning(rowNumber) {
+    getRowTiles(rows[rowNumber])
+    .forEach(tile => tile.setAttribute("style", ""));
+}
+
+function getRowWord(tiles) {
+    return tiles.map(elt => elt.innerHTML).join("")
+}
+
+
+// get pastwords from localStorage temporarily
+const localWords = localStorage.getItem(LOCAL_CACHE_KEY);
+
+let state = {
+    pastWordList: localWords
+}
+
+// fetch new 
+await fetch(DATA_URL).then(data => data.json()).then(words => {
+    if(state.pastWordList.length < words) {
+        state.pastWordList = words;
+        localStorage.setItem(LOCAL_CACHE_KEY, words);
+    }
+})
+
+const checkRepeat = () => {
+    const rowTiles = rows.map(getRowTiles);
+    rowTiles.forEach((row, i) => {
+        // if row is full and word is in list, set warning style
+        const word = getRowWord(row);
+        if (word.length === 5 && pastWords.includes(word)) {
+            setWarning(i);
+        } else {
+            clearWarning(i)
+        }
     })
 }
 
-function rowWord(rowTiles) {
-    return rowTiles.map(elt => elt.innerHTML).join("")
-}
-
-const words = () => rows.map(rowTiles).map(rowWord);
-
-const pastWords = await fetch(DATA_URL).then(data => data.json())
-
-let state = {
-    warning: false
-}
-
-const checkRepeat = () => {
-    const currentRow = words().indexOf("") - 1;
-    if(currentRow === -1) {currentRow = 5}
-
-    const currentWord = words()[currentRow];
-    if(currentWord.length >= 5 && pastWords.includes(currentWord)) {
-            if(state.warning) {
-                return;
-            }
-            setWarning(currentRow);
-            state.warning = true;
-    } else {
-        clearWarning();
-        state.warning=false;
-    }
-}
-
-setInterval(checkRepeat, 500);
+setInterval(checkRepeat, 200);
 })()
